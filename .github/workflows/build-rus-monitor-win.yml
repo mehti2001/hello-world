@@ -11,6 +11,8 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
     permissions:
       contents: write
 
@@ -34,6 +36,12 @@ jobs:
       - name: Unpack source bundle
         run: |
           python build_assets/unpack_source.py
+
+      - name: Validate extracted source tree
+        shell: pwsh
+        run: |
+          Get-Item run_rus_monitor.py
+          Get-ChildItem src -Recurse | Select-Object FullName
 
       - name: Build EXE
         run: |
